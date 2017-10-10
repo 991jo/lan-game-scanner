@@ -9,3 +9,21 @@ The goal is to scan a network and find gameservers for example CSGO, Call Of Dut
 The scanner should be easily configurable and expandable to support many different servers, games and protocols.
 
 In theory this scanner could also scan online IP Adresses.
+
+## Install instuctions
+
+Download the repository
+```
+git clone https://github.com/991jo/lan-game-scanner.git 
+```
+then you probably want to make a python virtualenv with python3. Take care, the name of the command might be slightly different on some systems.
+```
+virtualenv lan-game-scanner
+```
+Now install the the requirements
+```
+cd lan-game-scanner
+pip install -r requirements.txt
+```
+Now you can add your IPs in src/run.py
+

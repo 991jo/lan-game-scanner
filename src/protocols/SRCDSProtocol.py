@@ -34,7 +34,6 @@ class SRCDSProtocol(BaseProtocol):
             server.close()
 
     def scan(self, ip):
-        print("ports:", self.ports)
         results = list()
 
         ip_ports = zip([ip]*len(self.ports),self.ports)

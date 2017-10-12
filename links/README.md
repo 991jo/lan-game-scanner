@@ -9,3 +9,6 @@ https://developer.valvesoftware.com/wiki/Server_queries
 
 # Quake3
 http://aluigi.altervista.org/papers/q3info.txt
+
+# Minecraft
+http://wiki.vg/Server_List_Ping#Response

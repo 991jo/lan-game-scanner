@@ -12,7 +12,7 @@ class BaseProtocol(metaclass=abc.ABCMeta):
         self.ports.extend(ports)
 
     @abc.abstractmethod
-    def scan(self, ip):
-        """Scans the given IP on the ports defined for the protocol and returns
+    def scan(self, nets):
+        """Scans the given nets on the ports defined for the protocol and returns
         a list of dicts containing the found servers. If no servers are found 
         this list is empty"""

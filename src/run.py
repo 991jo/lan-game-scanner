@@ -1,25 +1,22 @@
 from pprint import PrettyPrinter
 
-import WorkerPool
-from ProtocolPool import ProtocolPool
-from IPGenerator import generate
 from protocols.SRCDSProtocol import SRCDSProtocol
 from protocols.Quake3Protocol import Quake3Protocol
 
 from outputs import export_json, export_gns
 
 
-#nets = ["213.202.223.128/25", "92.51.148.160/27"]
-nets = ["51.255.25.199/32","92.222.182.117/32", "87.117.203.203/32","162.248.92.171/32", "45.76.94.34/32"]
+nets = ["213.202.223.128/25", "92.51.148.160/27"]
+nets.extend(['84.200.101.114/32', '83.233.46.187/32', '188.116.46.134/32', '68.232.181.21/32', '148.251.167.15/32', '107.191.126.11/32', '69.28.210.30/32', '216.158.234.228/32', '190.112.0.109/32', '136.144.141.127/32', '84.200.223.179/32'])
+
 srcds = SRCDSProtocol()
 q3 = Quake3Protocol()
-ProtoPool = ProtocolPool([srcds,q3])
 
-p = WorkerPool.WorkerPool(ProtoPool, num_worker_threads = 10)
-result = p.scan(generate(nets))
+result = q3.scan(nets)
+result.extend(srcds.scan(nets))
 
 pp = PrettyPrinter(indent=2)
-#pp.pprint(result)
+pp.pprint(result)
 export_json.export(result, "./output.json")
 export_gns.export(result, "./output_gns.json")
 

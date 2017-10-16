@@ -1,22 +1,29 @@
 from pprint import PrettyPrinter
 
+#import WorkerPool
+#from ProtocolPool import ProtocolPool
+#from IPGenerator import generate
 from protocols.SRCDSProtocol import SRCDSProtocol
 from protocols.Quake3Protocol import Quake3Protocol
+from protocols.MumbleProtocol import MumbleProtocol
 
 from outputs import export_json, export_gns
 
 
-nets = ["213.202.223.128/25", "92.51.148.160/27"]
-nets.extend(['84.200.101.114/32', '83.233.46.187/32', '188.116.46.134/32', '68.232.181.21/32', '148.251.167.15/32', '107.191.126.11/32', '69.28.210.30/32', '216.158.234.228/32', '190.112.0.109/32', '136.144.141.127/32', '84.200.223.179/32'])
+nets = ["92.51.148.185/32","91.189.221.186/32","91.245.218.9/32"]
+
 
 srcds = SRCDSProtocol()
 q3 = Quake3Protocol()
+mumble = MumbleProtocol()
+protocols = [srcds, q3, mumble]
 
-result = q3.scan(nets)
-result.extend(srcds.scan(nets))
+results = list()
+for p in protocols:
+    results.extend(p.scan(nets))
 
 pp = PrettyPrinter(indent=2)
-pp.pprint(result)
-export_json.export(result, "./output.json")
-export_gns.export(result, "./output_gns.json")
+pp.pprint(results)
+export_json.export(results, "./output.json")
+export_gns.export(results, "./output_gns.json")
 

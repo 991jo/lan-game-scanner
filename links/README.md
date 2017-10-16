@@ -12,3 +12,6 @@ http://aluigi.altervista.org/papers/q3info.txt
 
 # Minecraft
 http://wiki.vg/Server_List_Ping#Response
+
+# Mumble
+https://wiki.mumble.info/wiki/Protocol

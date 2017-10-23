@@ -37,7 +37,16 @@ class SRCDSProtocol(BaseProtocol):
             for ip in ipaddress.ip_network(net):
                 ip_str = str(ip)
                 for port in self.ports:
-                    sock.sendto(MESSAGE,(ip_str,port))
+                    try:
+                        sock.sendto(MESSAGE,(ip_str,port))
+                    except socket.error as e:
+                        # sometimes there might be a socket error
+                        # e.g. when you are sending to a broadcast address
+                        # which happens when you are scanning a supernet of a
+                        # network the host is attached to
+                        # Sending to broadcast-adsresses in other networks should
+                        # be fine, because you don't know it's a broadcast address
+                        pass
                     sleep(0.001) # for rate limiting, because it may overwhelm some devices on the network path
 
         while True:

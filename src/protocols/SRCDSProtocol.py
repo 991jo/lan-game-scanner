@@ -74,7 +74,7 @@ class SRCDSProtocol(BaseProtocol):
                 folder_end                  = payload.find(b"\x00",mapname_end+1)
                 server_dict["game"]         = payload[mapname_end + 1: folder_end].decode('utf-8', 'ignore') # Folder
                 game_end                    = payload.find(b"\x00",folder_end+1)
-                server_dict["gametype"]     = payload[folder_end + 1: game_end].decode('utf-8', 'ignore') # Game
+                server_dict["game_type"]     = payload[folder_end + 1: game_end].decode('utf-8', 'ignore') # Game
                 # game_id                   = payload[game_end+1: game_end+3] # ID
                 server_dict["players"]      = int.from_bytes(payload[game_end+3:game_end+4],byteorder='little') # Players
                 server_dict["max_players"]  = int.from_bytes(payload[game_end+4:game_end+5], byteorder='little') # Max. Players

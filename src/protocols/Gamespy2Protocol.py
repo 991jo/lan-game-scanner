@@ -7,51 +7,24 @@ from protocols.BaseProtocol import BaseProtocol
 
 class Gamespy2Protocol(BaseProtocol):
 
-    def __init__(self, ports=[2302,2303,2304,2304,2305,23000,1717]):
+    def __init__(self, ports=[2302,2303,2304,2304,2305,23000,1717], bind_ip=None):
         # those ports are probably to many
-        super().__init__(ports=ports)
+        super().__init__(ports=ports, bind_ip=bind_ip)
 
-    def scan(self, nets):
+        self.message = bytearray([0xFE, 0xFD, 0x00, 0x43, 0x4F, 0x52, 0x59, 0xFF, 0xFF, 0x00] )
 
-        # Gamespy Protocol 
-        # http://int64.org/docs/gamestat-protocols/gamespy.html
-        results = list()
-
-        MESSAGE = bytearray([0xFE, 0xFD, 0x00, 0x43, 0x4F, 0x52, 0x59, 0xFF, 0xFF, 0x00] )
-
-
-        sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        sock.settimeout(5) # the socket timeout might be decreased then in a LAN
-        # increase the buffer size of the network, because it might be to slow.
-        # Also probably needs to be adjusted in the OS
-        # for linux it is e.g
-        # sysctl -w net.core.rmem_max=1048576
-        # this increases the buffer to 1MB
-        sock.setsockopt(socket.SOL_SOCKET, socket.SO_RCVBUF, 1048576)
-
-        for net in nets:
-            for ip in ipaddress.ip_network(net):
-                ip_str = str(ip)
-                for port in self.ports:
-                    sock.sendto(MESSAGE,(ip_str,port))
-                    sleep(0.001) # for rate limiting, because it may overwhelm some devices on the network path
-
-        pp = PrettyPrinter()
-        header_expected = b'\x00CORY'
-        while True:
-            try:
-                response = sock.recvfrom(4096)
+    def parse(self, response):
                 data = response[0]
                 sender = response[1]
 
                 header = data[:5]
+                header_expected = b'\x00CORY'
                 if header != header_expected:
                     print("Header missmatch")
                     print(response)
-                    continue
+                    return
 
                 payload = data[5:].split(b'\x00')
-#                pp.pprint(payload)
 
                 response_dict = dict()
 
@@ -62,8 +35,6 @@ class Gamespy2Protocol(BaseProtocol):
                     value = payload[i+1]
                     response_dict[key] = value
                     i+=2
-
-                pp.pprint(response_dict)
 
                 server_dict = dict()
                 server_dict["ip"] = sender[0]
@@ -80,12 +51,3 @@ class Gamespy2Protocol(BaseProtocol):
                 else:
                     server_dict["game"] = "unknown"
                 server_dict["game_type"] = None
-
-
-                results.append(server_dict)
-            # if the socket timeout is triggered no packet have been received in the last 5 seconds
-            except socket.timeout: 
-                break
-        sock.close()
-
-        return results

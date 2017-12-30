@@ -27,7 +27,6 @@ class SRCDSProtocol(BaseProtocol):
         if header != 0x49:
             print(data)
             return
-
         payload                     = data[2:] # Name
         name_end                    = payload.find(b"\x00")
         server_dict["server_name"]  = payload[2:name_end].decode('utf-8', 'ignore')  # Name

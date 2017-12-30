@@ -14,4 +14,4 @@ In theory this scanner could also scan online IP Adresses.
 
 Just download the repository and run src/run.py
 
-To customize the networks edit src/run.py
+To customize the networks or ips to scan take a look into src/example.ini

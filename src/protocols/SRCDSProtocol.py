@@ -29,7 +29,7 @@ class SRCDSProtocol(BaseProtocol):
             return
         payload                     = data[2:] # Name
         name_end                    = payload.find(b"\x00")
-        server_dict["server_name"]  = payload[2:name_end].decode('utf-8', 'ignore')  # Name
+        server_dict["server_name"]  = payload[0:name_end].decode('utf-8', 'ignore')  # Name
         mapname_end                 = payload.find(b"\x00",name_end+1)
         server_dict["map"]          = payload[name_end+1:mapname_end].decode('utf-8', 'ignore') # Map
         folder_end                  = payload.find(b"\x00",mapname_end+1)
